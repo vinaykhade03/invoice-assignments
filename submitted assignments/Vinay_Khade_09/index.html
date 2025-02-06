@@ -4,11 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Invoice Form</title>
+    <script defer src="script.js"></script>
 </head>
 
 <body>
-    
+    <div class="container mt-4">
+        <h1></h1>
+
+
         <invoice-component 
         config='{
             "containerClass": "invoice-container",
@@ -24,6 +30,7 @@
         "footerClass": "invoice-footer",
         "amountInWordsClass": "amount-in-words",
         "footerTextClass": "invoice-footer-text",
+        "circleClass":"Invoice-circle"
         }'
           
             data='{
@@ -133,8 +140,38 @@
                 ]
             }'>
         </invoice-component>
-  
+      
+        <issue-component
+            config='{
+                "formLabel": "form-label",
+                "formClass": "form-control",
+                "buttonClass": "btn btn-primary mt-3"
+            }'
+            data='[
+                
+                { "label": "Party Name", "type": "text", "placeholder": "Enter Party Name", "required": true },
+                { "label": "Party Mobile", "type": "text", "placeholder": "Enter Party Mobile Number", "required": true },
+                { "label": "Party Email", "type": "email", "placeholder": "Enter Party Email", "required": true },
+                { "label": "Party Address Location", "type": "text", "placeholder": "Enter Party Address Location", "required": true },
+                { "label": "Party Address Area", "type": "text", "placeholder": "Enter Party Address Area", "required": true },
+                { "label": "Party Address City", "type": "text", "placeholder": "Enter Party Address City", "required": true },
+                { "label": "Party Address State", "type": "text", "placeholder": "Enter Party Address State", "required": true },
+                { "label": "Party Address Country", "type": "text", "placeholder": "Enter Party Address Country", "required": true },
+                { "label": "Party Address Pincode", "type": "number", "placeholder": "Enter Party Address Pincode", "required": true },
+    
+                { "label": "Invoice Number", "type": "text", "placeholder": "Enter Invoice Number", "required": true },
+                { "label": "Invoice Date", "type": "date", "placeholder": "Select Invoice Date", "required": true },
+                { "label": "Sub Total", "type": "number", "placeholder": "Enter Sub Total", "required": true },
+                { "label": "Discount", "type": "number", "placeholder": "Enter Discount", "required": true },
+                { "label": "Taxable Amount", "type": "number", "placeholder": "Enter Taxable Amount", "required": true },
+    
+                { "label": "Amount", "type": "number", "placeholder": "Enter Amount", "required": true },
+                { "label": "Total Amount", "type": "number", "placeholder": "Enter Total Amount", "required": true },
+                { "label": "Amount in Words", "type": "text", "placeholder": "Enter Amount in Words", "required": true },
+
+            ]'>
+        </issue-component>
+    </div>
 </body>
-<script src="./script.js"></script>
 
 </html>

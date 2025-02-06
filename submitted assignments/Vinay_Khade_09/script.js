@@ -1,3 +1,117 @@
+class IssueComponent extends HTMLElement {
+    static observedAttributes = ["config", "data"];
+
+    defaultConfig = {
+        formLabel: "form-label",
+        formClass: "form-control",
+        buttonClass: "btn btn-primary mt-3"
+    };
+
+    defaultData = [
+        { label: "Party Name", type: "text", placeholder: "Enter Party Name", required: true },
+        { label: "Party Mobile", type: "text", placeholder: "Enter Party Mobile Number", required: true },
+        { label: "Party Email", type: "email", placeholder: "Enter Party Email", required: true },
+        { label: "Party Address Location", type: "text", placeholder: "Enter Party Address Location", required: true },
+        { label: "Party Address Area", type: "text", placeholder: "Enter Party Address Area", required: true },
+        { label: "Party Address City", type: "text", placeholder: "Enter Party Address City", required: true },
+        { label: "Party Address State", type: "text", placeholder: "Enter Party Address State", required: true },
+        { label: "Party Address Country", type: "text", placeholder: "Enter Party Address Country", required: true },
+        { label: "Party Address Pincode", type: "number", placeholder: "Enter Party Address Pincode", required: true },
+        { label: "Invoice Number", type: "text", placeholder: "Enter Invoice Number", required: true },
+        { label: "Invoice Date", type: "date", placeholder: "Select Invoice Date", required: true },
+        { label: "Sub Total", type: "number", placeholder: "Enter Sub Total", required: true },
+        { label: "Discount", type: "number", placeholder: "Enter Discount", required: true },
+        { label: "Taxable Amount", type: "number", placeholder: "Enter Taxable Amount", required: true },
+        { label: "SGST Total", type: "number", placeholder: "Enter SGST Total", required: true },
+        { label: "CGST Total", type: "number", placeholder: "Enter CGST Total", required: true },
+        { label: "IGST Total", type: "number", placeholder: "Enter IGST Total", required: true },
+        { label: "Amount", type: "number", placeholder: "Enter Amount", required: true },
+        { label: "Total Amount", type: "number", placeholder: "Enter Total Amount", required: true },
+        { label: "Amount in Words", type: "text", placeholder: "Enter Amount in Words", required: true },
+    
+    ];
+
+    config = {};
+    data = [];
+
+    constructor() {
+        super();
+        this.config = { ...this.defaultConfig };
+        this.data = [...this.defaultData];
+    }
+
+    connectedCallback() {
+        this.renderComponent();
+    }
+
+    attributeChangedCallback(name, oldValue, newValue) {
+        try {
+            if (name === "config" && newValue) {
+                const parsedConfig = JSON.parse(newValue);
+                this.config = { ...this.defaultConfig, ...parsedConfig };
+            }
+            if (name === "data" && newValue) {
+                const parsedData = JSON.parse(newValue);
+                this.data = Array.isArray(parsedData) ? parsedData : this.defaultData;
+            }
+        } catch (error) {
+            console.error("Error parsing attribute:", name, error);
+        }
+
+        this.renderComponent();
+    }
+
+    renderComponent() {
+        // Clear existing content
+        this.innerHTML = "";
+
+        // Create form
+        const form = document.createElement("form");
+
+        this.data.forEach(field => {
+            const formGroup = document.createElement("div");
+            formGroup.className = "mb-3";
+
+            // Label
+            const label = document.createElement("label");
+            label.className = this.config.formLabel;
+            label.textContent = field.label;
+
+            // Input
+            const input = document.createElement("input");
+            input.type = field.type || "text";
+            input.className = this.config.formClass;
+            input.placeholder = field.placeholder || "";
+            input.required = field.required || false;
+
+            formGroup.appendChild(label);
+            formGroup.appendChild(input);
+            form.appendChild(formGroup);
+        });
+
+        // Submit button
+        const submitButton = document.createElement("button");
+        submitButton.type = "submit";
+        submitButton.className = this.config.buttonClass;
+        submitButton.textContent = "Submit";
+
+        form.appendChild(submitButton);
+        this.appendChild(form);
+
+        // Form submission handling
+        form.addEventListener("submit", (event) => {
+            event.preventDefault();
+            const formData = {};
+            const inputs = form.querySelectorAll("input");
+            inputs.forEach((input, index) => {
+                const key = this.data[index]?.label || `Field ${index + 1}`;
+                formData[key] = input.value;
+            });
+            console.log("Form submitted with data:", formData);
+        });
+    }
+}
+
 class InvoiceComponent extends HTMLElement {
     // Default configuration with class names for various elements
     defaultConfig = {
@@ -14,6 +128,7 @@ class InvoiceComponent extends HTMLElement {
         footerClass: 'invoice-footer',
         amountInWordsClass: 'amount-in-words',
         footerTextClass: 'invoice-footer-text',
+        circleClass:'Invoice-circle',
         showBankDetails: true, 
         showTerms: true,
     };
@@ -85,7 +200,7 @@ class InvoiceComponent extends HTMLElement {
         // Load external CSS file
         const linkElement = document.createElement('link');
         linkElement.setAttribute('rel', 'stylesheet');
-        linkElement.setAttribute('href', 'style.css'); // Adjust the path if necessary
+        linkElement.setAttribute('href', 'css/style.css'); // Adjust the path if necessary
         shadow.appendChild(linkElement);
 
         // Create container for the invoice
@@ -156,6 +271,11 @@ class InvoiceComponent extends HTMLElement {
         // Invoice details
         const details = document.createElement('div');
         details.classList.add(config.detailsClass);
+
+        // Add the circle
+         const circle = document.createElement('div');
+         circle.classList.add(config.circleClass);
+         header.appendChild(circle);
         
         // Seller information
         const sellerInfo = this.createInfoSection('Seller', seller);
@@ -313,3 +433,4 @@ class InvoiceComponent extends HTMLElement {
 
 // Define the custom element
 customElements.define('invoice-component', InvoiceComponent);
+customElements.define("issue-component", IssueComponent);
